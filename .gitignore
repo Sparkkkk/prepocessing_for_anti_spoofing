@@ -1,3 +1,9 @@
+core/
+data/
+model/
+models/
+
+
 # IDE
 .idea/
 
