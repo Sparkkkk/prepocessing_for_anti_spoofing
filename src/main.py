@@ -1,7 +1,8 @@
-from extract_frame.extract_face_from_video import crop_face, extract_frames
+from src.extract_face_from_video import crop_face, extract_frames_from_video
+from src.extract_faces_from_folder import extract_face_from_image
 import tensorlayer as tl
 import numpy as np
-from extract_frame.evaluate_model import evaluate_model
+from src.evaluate_model import evaluate_model
 import sys
 import os
 import cv2
@@ -12,11 +13,7 @@ data_path = os.path.join(path, '..', 'data')
 dataset_path = os.path.join(data_path, 'dataset')
 image_path = os.path.join(data_path, 'image')
 
-
-def show_image(img):
-    cv2.imshow(' ', img)
-
-
 if __name__ == '__main__':
-    extract_frames(video_name='fake_face')
+    # extract_frames_from_video(video_name='fake_face')
+    extract_face_from_image('')
     evaluate_model(model_name='LeNet_anti_spoofing_99.npz')

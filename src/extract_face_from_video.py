@@ -30,7 +30,7 @@ def crop_face(frame):
     return face_ndarray
 
 
-def extract_frames(video_name):
+def extract_frames_from_video(video_name):
     cap = cv2.VideoCapture(os.path.join(video_path, '%s.mp4' % video_name))
     count_stored_images = 0
     count_frames = 0

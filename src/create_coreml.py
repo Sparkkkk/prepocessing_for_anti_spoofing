@@ -1,4 +1,4 @@
-from extract_frame.utility import convert_pb_to_coreml, create_pb_from_ckpt
+from src.utility import convert_pb_to_coreml, create_pb_from_ckpt
 import numpy as np
 
 if __name__ == '__main__':

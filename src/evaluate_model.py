@@ -4,8 +4,8 @@ import cv2
 import numpy as np
 import sys
 import os
-from extract_frame.extract_face_from_video import crop_face
-from extract_frame.utility import create_pb_from_ckpt, convert_pb_to_coreml
+from src.extract_face_from_video import crop_face
+from src.utility import create_pb_from_ckpt, convert_pb_to_coreml
 
 
 path = sys.path[0]
