@@ -9,7 +9,8 @@ from core import Alignment
 file_path = os.path.dirname(os.path.realpath(__file__))
 frames_path = os.path.join(file_path, 'frames')
 video_path = os.path.join(file_path, '..', 'data', 'videos')
-print(video_path)
+dataset_path = os.path.join(file_path, '..', 'data', 'dataset')
+
 if not os.path.exists(frames_path):
     os.mkdir(frames_path)
 
@@ -29,8 +30,8 @@ def crop_face(frame):
     return face_ndarray
 
 
-def extract_frames():
-    cap = cv2.VideoCapture(os.path.join(video_path, 'fake_face.mp4'))
+def extract_frames(video_name):
+    cap = cv2.VideoCapture(os.path.join(video_path, '%s.mp4' % video_name))
     count_stored_images = 0
     count_frames = 0
     faces = []
@@ -57,7 +58,7 @@ def extract_frames():
     cv2.destroyAllWindows()
 
     ndarray = np.array(faces)
-    tl.files.save_any_to_npy(ndarray, 'fake_face_test.npy')
+    tl.files.save_any_to_npy(ndarray, os.path.join(dataset_path, '%s.npy' % video_name))
 
 
 def read_npy_file(name):
@@ -69,7 +70,7 @@ def save_npy_file(content, name):
 
 
 def main():
-    extract_frames()
+    extract_frames('fake_face')
 
 
 if __name__ == '__main__':

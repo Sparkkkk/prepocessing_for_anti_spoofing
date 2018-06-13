@@ -9,9 +9,13 @@ from extract_frame.extract_face_from_video import crop_face
 lfw_path = '/Users/twotalltotems/Documents/openface/data/lfw/raw'
 
 file_path = os.path.dirname(os.path.realpath(__file__))
+data_path = os.path.join(file_path, '..', 'data')
+image_folder_path = os.path.join(data_path, 'image')
+dataset_folder_path = os.path.join(data_path, 'dataset')
+
 sys_path = sys.path[0]
 
-folders = list(os.walk(lfw_path))[1:]
+
 
 
 def show_images():
@@ -23,10 +27,14 @@ def show_images():
             cv2.imshow('img', cv2.imread(image_path))
 
 
-
-def extract_face_from_image():
+def extract_face_from_image(npy_file_name, image_folder_name=None, lfw=True):
     # collection of cropped faces
     faces = []
+
+    if lfw:
+        folders = list(os.walk(lfw_path))[1:]
+    else:
+        folders = list(os.walk(os.path.join(image_folder_path, image_folder_name)))[1:]
 
     count = 1
     for folder in folders:
@@ -45,17 +53,14 @@ def extract_face_from_image():
     ndarray = np.asarray(faces)
     length = ndarray.shape[0]
     labels = np.zeros(length)
-    dictionary = {'real_faces': ndarray, 'labels': labels}
-    tl.files.save_any_to_npy(dictionary, 'dataset/real.npy')
+    dictionary = {npy_file_name: ndarray, 'labels': labels}
+    tl.files.save_any_to_npy(dictionary, os.path.join(dataset_folder_path, '%s.npy' % npy_file_name))
 
 
 def main():
-    # extract_face_from_image()
-    show_images()
+    extract_face_from_image('real')
+    # show_images()
 
 
 if __name__ == '__main__':
     main()
-    # dictionary = tl.files.load_npy_to_any('dataset', 'real.npy')
-    # print(dictionary['real_faces'].shape)
-    # print('finished main function')
