@@ -15,5 +15,5 @@ image_path = os.path.join(data_path, 'image')
 
 if __name__ == '__main__':
     # extract_frames_from_video(video_name='fake_face')
-    extract_face_from_image('')
-    evaluate_model(model_name='LeNet_anti_spoofing_99.npz')
+    # extract_face_from_image('test', 'test_faces', False)
+    evaluate_model('test', model_name='LeNet_anti_spoofing_99.npz', second_file_name='fake_face')

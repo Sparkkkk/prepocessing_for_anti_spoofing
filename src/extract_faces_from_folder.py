@@ -5,13 +5,12 @@ import numpy as np
 import tensorlayer as tl
 from src.extract_face_from_video import crop_face
 
-
-lfw_path = '/Users/twotalltotems/Documents/openface/data/lfw/raw'
-
 file_path = os.path.dirname(os.path.realpath(__file__))
 data_path = os.path.join(file_path, '..', 'data')
 image_folder_path = os.path.join(data_path, 'image')
 dataset_folder_path = os.path.join(data_path, 'dataset')
+lfw_path = os.path.join(image_folder_path, 'raw')
+frames_path = os.path.join(file_path, 'frames')
 
 sys_path = sys.path[0]
 
@@ -19,7 +18,7 @@ sys_path = sys.path[0]
 def extract_face_from_image(npy_file_name, image_folder_name=None, lfw=True):
     # collection of cropped faces
     faces = []
-
+    count_stored_images = 0
     if lfw:
         folders = list(os.walk(lfw_path))[1:]
     else:
@@ -34,7 +33,9 @@ def extract_face_from_image(npy_file_name, image_folder_name=None, lfw=True):
             image = cv2.imread(image_path)
             cropped = crop_face(image)
             if cropped is not None:
+                cv2.imwrite(os.path.join(frames_path, 'frame_%d.jpg' % count_stored_images), cropped)
                 faces.append(cropped)
+                count_stored_images += 1
 
         print("done " + str(count))
         count += 1
@@ -42,8 +43,9 @@ def extract_face_from_image(npy_file_name, image_folder_name=None, lfw=True):
     ndarray = np.asarray(faces)
     length = ndarray.shape[0]
     labels = np.zeros(length)
-    dictionary = {npy_file_name: ndarray, 'labels': labels}
+    dictionary = {'X': ndarray, 'y': labels}
     tl.files.save_any_to_npy(dictionary, os.path.join(dataset_folder_path, '%s.npy' % npy_file_name))
+    print('saved! number of image is %d' % count_stored_images)
 
 
 def main():

@@ -57,8 +57,11 @@ def extract_frames_from_video(video_name):
     cap.release()
     cv2.destroyAllWindows()
 
-    ndarray = np.array(faces)
-    tl.files.save_any_to_npy(ndarray, os.path.join(dataset_path, '%s.npy' % video_name))
+    ndarray = np.asarray(faces)
+    length = ndarray.shape[0]
+    labels = np.ones(length)
+    dictionary = {'X': ndarray, 'y': labels}
+    tl.files.save_any_to_npy(dictionary, os.path.join(dataset_path, '%s.npy' % video_name))
 
 
 def read_npy_file(name):
@@ -70,7 +73,7 @@ def save_npy_file(content, name):
 
 
 def main():
-    extract_frames('fake_face')
+    extract_frames_from_video('fake_face')
 
 
 if __name__ == '__main__':

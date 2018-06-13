@@ -57,11 +57,17 @@ def network_99(x):
     return t_network
 
 
-def evaluate_model(model_name):
+def evaluate_model(npy_file_name, model_name, second_file_name=None):
     # X_test = tl.files.load_npy_to_any(dataset_path, 'real_face1.npy')
     # y_test = np.zeros(X_test.shape[0])
-    X_test = tl.files.load_npy_to_any(dataset_path, 'fake_face.npy')
-    y_test = np.ones(X_test.shape[0])
+    dictionary = tl.files.load_npy_to_any(dataset_path, '%s.npy' % npy_file_name)
+    X_test = dictionary['X']
+    y_test = dictionary['y']
+    if second_file_name is not None:
+        dictionary_2 = tl.files.load_npy_to_any(dataset_path, '%s.npy' % second_file_name)
+        X_test = np.append(X_test, dictionary_2['X'], axis=0)
+        y_test = np.append(y_test, dictionary_2['y'], axis=0)
+    print('count of test set: %d' % X_test.shape[0])
     # X_test = np.append(X_real, X_fake, axis=0)
     # assert X_test.shape == (X_test.shape[0], 112, 112, 3)
     # y_test = np.append(y_real, y_fake, axis=0)
@@ -98,7 +104,7 @@ def evaluate_model(model_name):
 
 
 if __name__ == '__main__':
-    evaluate_model(model_name='LeNet_anti_spoofing_99.npz')
+    evaluate_model('test', model_name='LeNet_anti_spoofing_99.npz')
 
 
 
