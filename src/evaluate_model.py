@@ -14,52 +14,92 @@ data_path = os.path.join(path, '..', 'data')
 dataset_path = os.path.join(data_path, 'dataset')
 image_path = os.path.join(data_path, 'image')
 
-# prepare data
-# img0 = cv2.imread(os.path.join(image_path, 'my_image_real.jpg'))
-# img1 = cv2.imread(os.path.join(image_path, 'my_image_fake.jpg'))
-# img2 = cv2.imread(os.path.join(image_path, 'image_real_1.jpg'))
-# img3 = cv2.imread(os.path.join(image_path, 'image_fake_2.jpg'))
-# X_test = np.ndarray([4, 112, 112, 3])
-# X_test[0] = crop_face(img0)
-# X_test[1] = crop_face(img1)
-# X_test[2] = crop_face(img2)
-# X_test[3] = crop_face(img3)
-# y_test = np.array([0, 1, 0, 1])
-
 
 # define network
 def network_97(x):
-    t_network = tl.layers.InputLayer(x, name='input_layer')
-    t_network = tl.layers.Conv2d(t_network, 5, (5, 5), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv1')
-    t_network = tl.layers.MaxPool2d(t_network, (3, 3), (3, 3), 'SAME', name='max_pooling2d')
-    t_network = tl.layers.Conv2d(t_network, 20, (5, 5), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv2')
-    t_network = tl.layers.MaxPool2d(t_network, (3, 3), (3, 3), name='maxpool2d')
-    t_network = tl.layers.FlattenLayer(t_network, name='flatten')
-    t_network = tl.layers.DropoutLayer(t_network, keep=0.5, name='dropout1')
-    t_network = tl.layers.DenseLayer(t_network, 256, act=tf.nn.relu, name='dense1')
-    t_network = tl.layers.DropoutLayer(t_network, keep=0.5, name='dropout2')
-    t_network = tl.layers.DenseLayer(t_network, 2, act=tf.identity, name='output_layer')
-    return t_network
+    network = tl.layers.InputLayer(x, name='input_layer')
+    network = tl.layers.Conv2d(network, 5, (5, 5), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv1')
+    network = tl.layers.MaxPool2d(network, (3, 3), (3, 3), 'SAME', name='max_pooling2d')
+    network = tl.layers.Conv2d(network, 20, (5, 5), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv2')
+    network = tl.layers.MaxPool2d(network, (3, 3), (3, 3), name='maxpool2d')
+    network = tl.layers.FlattenLayer(network, name='flatten')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout1')
+    network = tl.layers.DenseLayer(network, 256, act=tf.nn.relu, name='dense1')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout2')
+    network = tl.layers.DenseLayer(network, 2, act=tf.identity, name='output_layer')
+    return network
 
 
 def network_99(x):
     # define network
-    t_network = tl.layers.InputLayer(x, name='input_layer')
-    t_network = tl.layers.Conv2d(t_network, 20, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv1')
-    t_network = tl.layers.MeanPool2d(t_network, (3, 3), (3, 3), name='max_pooling2d')
-    t_network = tl.layers.Conv2d(t_network, 30, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv2')
-    t_network = tl.layers.MeanPool2d(t_network, (3, 3), (3, 3), name='maxpool2d')
-    t_network = tl.layers.FlattenLayer(t_network, name='flatten')
-    t_network = tl.layers.DropoutLayer(t_network, keep=0.5, name='dropout1')
-    t_network = tl.layers.DenseLayer(t_network, 256, act=tf.nn.relu, name='dense1')
-    t_network = tl.layers.DropoutLayer(t_network, keep=0.5, name='dropout2')
-    t_network = tl.layers.DenseLayer(t_network, 2, act=tf.identity, name='output_layer')
-    return t_network
+    network = tl.layers.InputLayer(x, name='input_layer')
+    network = tl.layers.Conv2d(network, 20, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv1')
+    network = tl.layers.MeanPool2d(network, (3, 3), (3, 3), name='max_pooling2d')
+    network = tl.layers.Conv2d(network, 30, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv2')
+    network = tl.layers.MeanPool2d(network, (3, 3), (3, 3), name='maxpool2d')
+    network = tl.layers.FlattenLayer(network, name='flatten')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout1')
+    network = tl.layers.DenseLayer(network, 256, act=tf.nn.relu, name='dense1')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout2')
+    network = tl.layers.DenseLayer(network, 2, act=tf.identity, name='output_layer')
+    return network
 
 
-def evaluate_model(npy_file_name, model_name, second_file_name=None):
-    # X_test = tl.files.load_npy_to_any(dataset_path, 'real_face1.npy')
-    # y_test = np.zeros(X_test.shape[0])
+def network_992(x):
+    network = tl.layers.InputLayer(x, name='input_layer')
+    network = tl.layers.Conv2d(network, 20, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv1')
+    network = tl.layers.MeanPool2d(network, (3, 3), (3, 3), name='max_pooling2d')
+    network = tl.layers.Conv2d(network, 30, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv2')
+    network = tl.layers.MeanPool2d(network, (3, 3), (3, 3), name='maxpool2d')
+    network = tl.layers.FlattenLayer(network, name='flatten')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout1')
+    network = tl.layers.DenseLayer(network, 256, act=tf.nn.relu, name='dense1')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout1')
+    network = tl.layers.DenseLayer(network, 128, act=tf.nn.relu, name='dense2')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout2')
+    network = tl.layers.DenseLayer(network, 2, act=tf.identity, name='output_layer')
+    return network
+
+
+def network_vgg11_813(x):
+    # define network
+    network = tl.layers.InputLayer(x, name='input_layer')
+    network = tl.layers.Conv2d(network, 64, (7, 7), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv1')
+    network = tl.layers.MaxPool2d(network, (2, 2), (2, 2), name='max_pooling2d')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout1')
+    network = tl.layers.Conv2d(network, 128, (5, 5), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv2')
+    network = tl.layers.MaxPool2d(network, (2, 2), (2, 2), name='maxpool2d')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout2')
+    network = tl.layers.Conv2d(network, 256, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv3')
+    network = tl.layers.Conv2d(network, 256, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv4')
+    network = tl.layers.MaxPool2d(network, (2, 2), (2, 2), name='maxpool2d')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout3')
+    network = tl.layers.Conv2d(network, 512, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv5')
+    network = tl.layers.Conv2d(network, 512, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv6')
+
+    return network
+
+
+def network_99_three_dense(x):
+    # define network
+    network = tl.layers.InputLayer(x, name='input_layer')
+    network = tl.layers.Conv2d(network, 20, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv1')
+    network = tl.layers.MeanPool2d(network, (3, 3), (3, 3), name='max_pooling2d')
+    network = tl.layers.Conv2d(network, 30, (3, 3), strides=(1, 1), act=tf.nn.relu, padding='SAME', name='conv2')
+    network = tl.layers.MeanPool2d(network, (3, 3), (3, 3), name='maxpool2d')
+    network = tl.layers.FlattenLayer(network, name='flatten')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout1')
+    network = tl.layers.DenseLayer(network, 512, act=tf.nn.relu, name='dense1')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout1')
+    network = tl.layers.DenseLayer(network, 256, act=tf.nn.relu, name='dense2')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout2')
+    network = tl.layers.DenseLayer(network, 128, act=tf.nn.relu, name='dense3')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout2')
+    network = tl.layers.DenseLayer(network, 2, act=tf.identity, name='output_layer')
+    return network
+
+
+def get_X_y_test(npy_file_name, second_file_name=None):
     dictionary = tl.files.load_npy_to_any(dataset_path, '%s.npy' % npy_file_name)
     X_test = dictionary['X']
     y_test = dictionary['y']
@@ -67,10 +107,10 @@ def evaluate_model(npy_file_name, model_name, second_file_name=None):
         dictionary_2 = tl.files.load_npy_to_any(dataset_path, '%s.npy' % second_file_name)
         X_test = np.append(X_test, dictionary_2['X'], axis=0)
         y_test = np.append(y_test, dictionary_2['y'], axis=0)
-    print('count of test set: %d' % X_test.shape[0])
-    # X_test = np.append(X_real, X_fake, axis=0)
-    # assert X_test.shape == (X_test.shape[0], 112, 112, 3)
-    # y_test = np.append(y_real, y_fake, axis=0)
+    return (X_test, y_test)
+
+
+def evaluate_model(X_test, y_test, model_name, test_accurary=True):
 
     # create a session for tf
     sess = tf.InteractiveSession()
@@ -80,7 +120,7 @@ def evaluate_model(npy_file_name, model_name, second_file_name=None):
     x = tf.placeholder(tf.float32, shape=[None, 112, 112, 3], name='x')
     y_ = tf.placeholder(tf.int64, shape=[None, ], name='y_')
 
-    network = network_99(x)
+    network = network_99_three_dense(x)
 
     # print network information
     # network.print_params()
@@ -97,10 +137,15 @@ def evaluate_model(npy_file_name, model_name, second_file_name=None):
     # tl.files.save_ckpt(sess=sess, mode_name='LeNet_anti_spoofing_97.ckpt', save_dir='model', printable=True)
 
     # tf.train.write_graph(sess.graph_def, 'model', 'LeNet_anti_spoofing_97.pbtxt')
-    tl.utils.test(sess, network, accuracy, X_test, y_test, x, y_, batch_size=None, cost=cost)
+    if test_accurary:
+        tl.utils.test(sess, network, accuracy, X_test, y_test, x, y_, batch_size=None, cost=cost)
+        sess.close()
+    else:
+        return sess, network, x, y_op
 
     # create a pb file to store graph and parameter
     # create_pb_from_ckpt('LeNet_anti_spoofing_97', 'Softmax')
+
 
 
 if __name__ == '__main__':

@@ -33,7 +33,7 @@ def extract_face_from_image(npy_file_name, image_folder_name=None, lfw=True):
             image = cv2.imread(image_path)
             cropped = crop_face(image)
             if cropped is not None:
-                cv2.imwrite(os.path.join(frames_path, 'frame_%d.jpg' % count_stored_images), cropped)
+                # cv2.imwrite(os.path.join(frames_path, 'frame_%d.jpg' % count_stored_images), cropped)
                 faces.append(cropped)
                 count_stored_images += 1
 

@@ -1,7 +1,13 @@
 from tensorflow.python.tools.freeze_graph import freeze_graph
+from core import Detector
+from core import Alignment
 import tfcoreml
 import numpy as np
 
+
+size = '112, 112'
+detector = Detector()
+aligner = Alignment()
 
 def create_pb_from_ckpt(model_name, output_node):
     # convert to a pb file
@@ -44,3 +50,13 @@ def evaluate_coreml(coreml_model):
     coreml_inputs = {'Placeholder__0': np.random.rand(1, 1, 112, 112, 3)}  # (sequence_length=1,batch=1,channels=784)
     coreml_output = coreml_model.predict(coreml_inputs, useCPUOnly=False)
     return coreml_output
+
+
+def crop_face_with_box(frame):
+    box = detector.detect_face(frame)
+    if box is None:
+        return None, None
+    face_ndarray = aligner.warp_image(frame, box[0, 0:4], image_size=size)
+    # face_ndarray = cv2.cvtColor(face_ndarray, cv2.COLOR_BGR2RGB)
+    # face_ndarray = np.transpose(face_ndarray, (2, 0, 1))
+    return face_ndarray, box
