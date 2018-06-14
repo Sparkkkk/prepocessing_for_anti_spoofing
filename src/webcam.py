@@ -30,26 +30,26 @@ class Webcam():
             ret, frame = self.video.read()
 
             cropped, boxes = crop_face_with_box(frame)
-            label = 'processing'
+            label_text = 'processing'
             if cropped is not None and boxes is not None:
                 X = np.asarray([cropped])
                 label = tl.utils.predict(self.session, self.network, X, self.x, self.y_op)[0]
                 if label == 0:
-                    print('real')
+                    label_text = 'real'
+                    print(label_text)
                 else:
-                    print('fake')
+                    label_text = 'fake'
+                    print(label_text)
                 box = boxes[0]
-            else:
-                continue
-            # Draw a box around the face
-            left = int(box[0])
-            bottom = int(box[1])
-            right = int(box[2])
-            top = int(box[3])
-            cv2.rectangle(frame, (left, bottom), (right, top), (0, 0, 255), 2)
-            # Draw a label with a name below the face
-            font = cv2.FONT_HERSHEY_DUPLEX
-            # cv2.putText(frame, label, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+                # Draw a box around the face
+                left = int(box[0])
+                bottom = int(box[1])
+                right = int(box[2])
+                top = int(box[3])
+                cv2.rectangle(frame, (left, bottom), (right, top), (0, 0, 255), 2)
+                # Draw a label with a name below the face
+                font = cv2.FONT_HERSHEY_DUPLEX
+                cv2.putText(frame, label_text, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
             cv2.imshow('Frame', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
