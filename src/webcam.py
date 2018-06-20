@@ -22,7 +22,7 @@ class Webcam():
         self.video.set(3, 1920)
         self.video.set(4, 1080)
         self.session, self.network, self.x, self.y_op = evaluate_model(None, None,
-                                                                       model_name='LeNet_anti_spoofing_989_with_my_img.npz',
+                                                                       model_name='LeNet_anti_spoofing_1_99.npz',
                                                                        test_accurary=False)
 
     def run(self):

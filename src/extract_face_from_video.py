@@ -4,18 +4,19 @@ import numpy as np
 import tensorlayer as tl
 from core import Detector
 from core import Alignment
+from src.utility import min_max_regions
 
 # set path
 file_path = os.path.dirname(os.path.realpath(__file__))
 frames_path = os.path.join(file_path, 'frames')
-video_path = os.path.join(file_path, '..', 'data', 'videos')
+local_video_path = os.path.join(file_path, '..', 'data', 'videos')
 dataset_path = os.path.join(file_path, '..', 'data', 'dataset')
 
 if not os.path.exists(frames_path):
     os.mkdir(frames_path)
 
 # size of cropped face
-size = '112, 112'
+size = '128, 128'
 detector = Detector()
 aligner = Alignment()
 
@@ -30,18 +31,23 @@ def crop_face(frame):
     return face_ndarray
 
 
-def extract_frames_from_video(video_name):
+def extract_frames_from_video(video_name, dataset, jump_frame, video_path):
+    dictionary = extract_face(jump_frame, video_name, video_path)
+    # tl.files.save_any_to_npy(dictionary, os.path.join(dataset, '%s.npy' % video_name))
+    save_npy_file(dictionary, os.path.join(dataset, '%s.npy' % video_name))
+
+
+def extract_face(video_name, jump_frame, video_path):
     cap = cv2.VideoCapture(os.path.join(video_path, '%s.mp4' % video_name))
     count_stored_images = 0
     count_frames = 0
     faces = []
-
     while cap.isOpened():
         count_frames += 1
 
         ret, frame = cap.read()
 
-        if not count_frames % 6 == 3:
+        if not count_frames % jump_frame == jump_frame // 2:
             continue
 
         if ret is True:
@@ -53,15 +59,47 @@ def extract_frames_from_video(video_name):
                 count_stored_images += 1
         else:
             break
-
     cap.release()
     cv2.destroyAllWindows()
-
     ndarray = np.asarray(faces)
     length = ndarray.shape[0]
     labels = np.ones(length)
     dictionary = {'X': ndarray, 'y': labels}
-    tl.files.save_any_to_npy(dictionary, os.path.join(dataset_path, '%s.npy' % video_name))
+    return dictionary
+
+
+def extract_faces_for_3d_cnn(n_frames, video_name, jump_frame, video_path):
+    cap = cv2.VideoCapture(os.path.join(video_path, '%s.mp4' % video_name))
+    count_frames = 0
+    frames = []
+    regions = []
+    X = []
+    while cap.isOpened():
+        count_frames += 1
+
+        ret, single_frame = cap.read()
+
+        if not count_frames % jump_frame == jump_frame // 2:
+            continue
+
+        if ret is True:
+            if len(frames) == n_frames:
+                region = min_max_regions(np.asarray(regions))
+                x = np.asarray([aligner.warp_image(frame, region, image_size=size) for frame in frames])
+                X.append(x)
+                frames = []
+                regions = []
+            else:
+                boxes = detector.detect_face(single_frame)
+                if boxes is not None:
+                    frames.append(single_frame)
+                    box = boxes[0, 0:4]
+                    regions.append(box)
+        else:
+            break
+    X = np.asarray(X)
+    # print(X.shape)
+    return X
 
 
 def read_npy_file(name):
@@ -73,7 +111,7 @@ def save_npy_file(content, name):
 
 
 def main():
-    extract_frames_from_video('fake_face')
+    extract_frames_from_video('video7', dataset_path, 15, local_video_path)
 
 
 if __name__ == '__main__':

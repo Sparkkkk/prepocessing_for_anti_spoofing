@@ -36,9 +36,9 @@ def main():
     # extract_face_from_image('zhen', 'zhen', False)
     X_test, y_test = get_X_y_test('test', 'fake_face')
     # X_test, y_test = get_test_data_from_image()
-    evaluate_model(X_test, y_test, model_name='LeNet_anti_spoofing_989_with_my_img.npz')
+    evaluate_model(X_test, y_test, model_name='LeNet_anti_spoofing_1_99.npz')
 
 
 if __name__ == '__main__':
+    # print(tl.files.load_npy_to_any(dataset_path, 'dataset_new.npy')['X_train'].shape)
     main()
-
