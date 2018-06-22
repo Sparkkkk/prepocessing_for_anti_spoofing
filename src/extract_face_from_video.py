@@ -1,7 +1,6 @@
 import cv2
 import os
 import numpy as np
-import tensorlayer as tl
 from core import Detector
 from core import Alignment
 from src.utility import min_max_regions
@@ -97,17 +96,20 @@ def extract_faces_for_3d_cnn(n_frames, video_name, jump_frame, video_path):
                     regions.append(box)
         else:
             break
-    X = np.asarray(X)
-    # print(X.shape)
-    return X
 
+    # X = np.asarray(X)
+    # # print(X.shape)
+    # return X
 
-def read_npy_file(name):
-    return tl.files.load_npy_to_any('data', name=name)
-
-
-def save_npy_file(content, name):
-    tl.files.save_any_to_npy(content, name)
+    # return at most 2 objects in order to decrease size
+    length = len(X)
+    res = np.ndarray([0, 8, 128, 128, 3])
+    if length >= 2:
+        res = np.asarray([X[0], X[-1]])
+    elif length != 0:
+        res = np.asarray([X[0]])
+    # print(res.shape)
+    return res
 
 
 def main():

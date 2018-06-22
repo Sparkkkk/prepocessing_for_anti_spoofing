@@ -1,4 +1,5 @@
 import cv2
+import tensorlayer as tl
 from tensorflow.python.tools.freeze_graph import freeze_graph
 from core import Detector
 from core import Alignment
@@ -110,6 +111,27 @@ def min_max_regions(regions):
 #     align = aligner.align_faces_without_transpose(frame, box)[0]
 #
 #     return align
+
+def read_npy_file(name):
+    return tl.files.load_npy_to_any('data', name=name)
+
+
+def save_npy_file(content, name):
+    tl.files.save_any_to_npy(content, name)
+
+
+def save_large_npy_file(content: np.ndarray, path: str, file_name_prefix: str, real: bool, size_for_each_file=500):
+    if not os.path.exists(path):
+        os.mkdir(path)
+    count = content.shape[0] // size_for_each_file
+    for i in range(0, count + 1):
+        X = content[i * size_for_each_file: (i + 1) * size_for_each_file] if i is not count \
+            else content[i * size_for_each_file:]
+        y = np.zeros(X.shape[0]) if real else np.ones(X.shape[0])
+        dictionary = {'X': X, 'y': y}
+        file_name = file_name_prefix + '_%d' % i
+        save_npy_file(dictionary, os.path.join(path, file_name))
+
 
 def main():
     crop, box = crop_face_with_box(cv2.imread(os.path.join(image_path, 'image_fake_2.jpg')))
