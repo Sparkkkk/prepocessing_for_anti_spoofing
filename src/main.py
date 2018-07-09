@@ -36,7 +36,7 @@ def main():
     # extract_face_from_image('zhen', 'zhen', False)
     X_test, y_test = get_X_y_test('test', 'fake_face')
     # X_test, y_test = get_test_data_from_image()
-    evaluate_model(X_test, y_test, model_name='LeNet_anti_spoofing_1_99.npz')
+    evaluate_model(X_test, y_test, model_name='AsNet_2.npz')
 
 
 if __name__ == '__main__':

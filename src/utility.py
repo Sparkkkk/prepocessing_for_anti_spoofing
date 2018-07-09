@@ -12,7 +12,7 @@ path = sys.path[0]
 data_path = os.path.join(path, '..', 'data')
 image_path = os.path.join(data_path, 'image')
 
-size = '112, 112'
+# size = '112, 112'
 detector = Detector()
 aligner = Alignment()
 
@@ -60,7 +60,7 @@ def evaluate_coreml(coreml_model):
     return coreml_output
 
 
-def crop_face_with_box(frame):
+def crop_face_with_box(frame, size='112, 112'):
     box = detector.detect_face(frame)
     if box is None:
         return None, None
