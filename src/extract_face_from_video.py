@@ -104,8 +104,8 @@ def extract_faces_for_3d_cnn(n_frames, video_name, jump_frame, video_path):
 
     # return at most 2 objects in order to decrease size
     length = len(X)
-    res = np.ndarray([0, 8, 128, 128, 3])
-    assert_shape = (8, 128, 128, 3)
+    res = np.ndarray([0, n_frames, 128, 128, 3])
+    assert_shape = (n_frames, 128, 128, 3)
     # if length >= 2:
     #     if X[0].shape == assert_shape and X[1].shape == assert_shape:
     #         res = np.asarray([X[0], X[-1]])
