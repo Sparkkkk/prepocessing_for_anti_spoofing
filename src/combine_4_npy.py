@@ -10,6 +10,7 @@ dataset_path = os.path.join(data_path, 'dataset')
 clean_data_path = os.path.join(data_path, 'clean_data')
 new_dataset_path = os.path.join(data_path, 'anti_spoofing_video_dataset', 'npy')
 
+
 def save_fake_face_npz():
     v0 = tl.files.load_npy_to_any(temp_data_path, 'video0.npy')
     v1 = tl.files.load_npy_to_any(temp_data_path, 'video1.npy')
@@ -81,7 +82,58 @@ def load_dataset():
     return X_train, y_train, X_valid, y_valid, X_test, y_test
 
 
+def load_data_for_generalization(new_dataset_path):
+    X = []
+    y = []
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'G_training_j5_0.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'G_training_j5_0.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'G_training_j5_1.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'G_training_j5_1.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'G_training_j5_2.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'G_training_j5_2.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_0.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_0.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_1.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_1.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_2.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_2.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_3.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_3.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_4.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_4.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_5.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_5.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    temp_x = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_6.npy')['X']
+    temp_y = tl.files.load_npy_to_any(new_dataset_path, 'F_training_j5_6.npy')['y']
+    X.append(temp_x)
+    y.append(temp_y)
+    X = np.asarray(X)
+    y = np.asarray(y)
+    print(X.reshape(X.shape[0] * X.shape[1], X.shape[2], X.shape[3], X.shape[4], X.shape[5]).shape)
+    print(y.reshape(y.shape[0] * y.shape[1], y.shape[2]).shape)
+    return X, y
+
 if __name__ == '__main__':
-    print(sys.path[0])
+    # print(sys.path[0])
+    # load_dataset()
+    load_data_for_generalization()
 
 

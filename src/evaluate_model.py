@@ -4,8 +4,8 @@ import cv2
 import numpy as np
 import sys
 import os
-from src.extract_face_from_video import crop_face
-from src.utility import create_pb_from_ckpt, convert_pb_to_coreml
+# from src.extract_face_from_video import crop_face
+# from src.utility import create_pb_from_ckpt
 
 
 path = sys.path[0]
@@ -140,6 +140,35 @@ def AsNet(x):
     network = tl.layers.DenseLayer(network, 2, act=tf.identity, name='output_layer')
     return network
 
+
+def AsNet_1fc(x):
+    network = tl.layers.InputLayer(x, name='input_layer')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 3, 1), strides=(1, 1, 1, 1, 1), padding='SAME', name='3d_1')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_1')
+    network = tl.layers.MaxPool3d(network, filter_size=(1, 2, 2), strides=(1, 2, 2), name='mp_1')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 1, 1), strides=(1, 1, 1, 1, 1), padding='SAME', name='3d_2')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_2')
+    network = tl.layers.MaxPool3d(network, filter_size=(1, 2, 2), strides=(1, 2, 2), name='mp_2')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 1, 1), strides=(1, 1, 1, 1, 1), padding='SAME', name='3d_3')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_3')
+    network = tl.layers.MaxPool3d(network, filter_size=(1, 2, 2), strides=(1, 2, 2), name='mp_3')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 1, 1), strides=(1, 1, 1, 1, 1), padding='SAME', name='3d_4')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_4')
+    network = tl.layers.MaxPool3d(network, filter_size=(2, 2, 2), strides=(2, 2, 2), name='mp_4')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 1, 1), strides=(1, 1, 1, 1, 1), padding='SAME', name='3d_5')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_5')
+    network = tl.layers.MaxPool3d(network, filter_size=(2, 2, 2), strides=(2, 2, 2), name='mp_5')
+    network = tl.layers.FlattenLayer(network, name='flatten')
+    network = tl.layers.DenseLayer(network, 1024, name='dense_1')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.relu, name='bn_6')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout_1')
+    # network = tl.layers.DenseLayer(network, 1024, name='dense_2')
+    # network = tl.layers.BatchNormLayer(network, act=tf.nn.relu, name='bn_7')
+    # network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout_2')
+    network = tl.layers.DenseLayer(network, 2, act=tf.identity, name='output_layer')
+    return network
+
+
 def AsNet_2fc(x):
     # define network
     network = tl.layers.InputLayer(x, name='input_layer')
@@ -173,6 +202,42 @@ def AsNet_2fc(x):
     network = tl.layers.DenseLayer(network, 2, act=tf.identity, name='output_layer')
     return network
 
+def AsNet_3fc(x):
+    # define network
+    network = tl.layers.InputLayer(x, name='input_layer')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 3, 1), strides=(1, 1, 1, 1, 1), padding='SAME',
+                                    name='3d_1')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_1')
+    network = tl.layers.MaxPool3d(network, filter_size=(1, 2, 2), strides=(1, 2, 2), name='mp_1')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 1, 1), strides=(1, 1, 1, 1, 1), padding='SAME',
+                                    name='3d_2')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_2')
+    network = tl.layers.MaxPool3d(network, filter_size=(1, 2, 2), strides=(1, 2, 2), name='mp_2')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 1, 1), strides=(1, 1, 1, 1, 1), padding='SAME',
+                                    name='3d_3')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_3')
+    network = tl.layers.MaxPool3d(network, filter_size=(1, 2, 2), strides=(1, 2, 2), name='mp_3')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 1, 1), strides=(1, 1, 1, 1, 1), padding='SAME',
+                                    name='3d_4')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_4')
+    network = tl.layers.MaxPool3d(network, filter_size=(2, 2, 2), strides=(2, 2, 2), name='mp_4')
+    network = tl.layers.Conv3dLayer(network, shape=(3, 3, 3, 1, 1), strides=(1, 1, 1, 1, 1), padding='SAME',
+                                    name='3d_5')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.leaky_relu, name='bn_5')
+    network = tl.layers.MaxPool3d(network, filter_size=(2, 2, 2), strides=(2, 2, 2), name='mp_5')
+    network = tl.layers.FlattenLayer(network, name='flatten')
+    network = tl.layers.DenseLayer(network, 1024, name='dense_1')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.relu, name='bn_6')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout_1')
+    network = tl.layers.DenseLayer(network, 1024, name='dense_2')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.relu, name='bn_7')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout_2')
+    network = tl.layers.DenseLayer(network, 1024, name='dense_3')
+    network = tl.layers.BatchNormLayer(network, act=tf.nn.relu, name='bn_8')
+    network = tl.layers.DropoutLayer(network, keep=0.5, name='dropout_3')
+    network = tl.layers.DenseLayer(network, 2, act=tf.identity, name='output_layer')
+    return network
+
 def evaluate_AsNet(X_test, y_test, model_name, test_accurary=True):
 
     # create a session for tf
@@ -180,9 +245,9 @@ def evaluate_AsNet(X_test, y_test, model_name, test_accurary=True):
 
     # define placeholder
     x = tf.placeholder(tf.float32, shape=[None, 8, 128, 128, 3], name='x')
-    y_ = tf.placeholder(tf.int64, shape=[None, ], name='y_')
+    y_ = tf.placeholder(tf.int64, shape=[None, 2], name='y_')
 
-    network = AsNet(x)
+    network = AsNet_1fc(x)
 
     # print network information
     # network.print_params()
@@ -190,7 +255,7 @@ def evaluate_AsNet(X_test, y_test, model_name, test_accurary=True):
 
     # define cost function and metric
     y = network.outputs
-    cost = tl.cost.cross_entropy(y, y_, 'cost')
+    # cost = tl.cost.cross_entropy(y, y_, 'cost')
     correct_prediction = tf.equal(tf.argmax(y, 1), y_)
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
     y_op = tf.argmax(tf.nn.softmax(y), 1)
@@ -200,7 +265,7 @@ def evaluate_AsNet(X_test, y_test, model_name, test_accurary=True):
 
     # tf.train.write_graph(sess.graph_def, 'model', 'LeNet_anti_spoofing_97.pbtxt')
     if test_accurary:
-        tl.utils.test(sess, network, accuracy, X_test, y_test, x, y_, batch_size=None, cost=cost)
+        # tl.utils.test(sess, network, accuracy, X_test, y_test, x, y_, batch_size=None, cost=cost)
         sess.close()
     else:
         return sess, network, x, y_op
@@ -219,7 +284,7 @@ def evaluate_model(X_test, y_test, model_name, test_accurary=True):
     x = tf.placeholder(tf.float32, shape=[None, 8, 128, 128, 3], name='x')
     y_ = tf.placeholder(tf.int64, shape=[None, ], name='y_')
 
-    network = AsNet(x)
+    network = AsNet_2fc(x)
 
     # print network information
     # network.print_params()

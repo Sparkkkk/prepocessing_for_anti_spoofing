@@ -85,6 +85,7 @@ def extract_faces_for_3d_cnn(n_frames, video_name, jump_frame, video_path):
             if len(frames) == n_frames:
                 region = min_max_regions(np.asarray(regions))
                 x = np.asarray([aligner.warp_image(frame, region, image_size=size) for frame in frames])
+                cv2.imwrite(os.path.join(frames_path, 'frame_%d.jpg' % count_frames), x[0])
                 X.append(x)
                 frames = []
                 regions = []
@@ -104,11 +105,27 @@ def extract_faces_for_3d_cnn(n_frames, video_name, jump_frame, video_path):
     # return at most 2 objects in order to decrease size
     length = len(X)
     res = np.ndarray([0, 8, 128, 128, 3])
-    if length >= 2:
-        res = np.asarray([X[0], X[-1]])
-    elif length != 0:
-        res = np.asarray([X[0]])
-    # print(res.shape)
+    assert_shape = (8, 128, 128, 3)
+    # if length >= 2:
+    #     if X[0].shape == assert_shape and X[1].shape == assert_shape:
+    #         res = np.asarray([X[0], X[-1]])
+    # elif length != 0 and X[0].shape == assert_shape:
+    #     res = np.asarray([X[0]])
+    for i in generate_index(8, length):
+        if i < length and X[i].shape == assert_shape:
+            res = np.vstack((res, [X[i]]))
+    print(res.shape)
+    return res
+
+
+def generate_index(preset_frames, length):
+    if length is 0:
+        return []
+    if length is 1 or length is 2:
+        return [0]
+    number_frame = length - 1
+    number_frame = preset_frames if length >= preset_frames else number_frame
+    res = [length // (number_frame - 1) * i for i in range(number_frame)]
     return res
 
 
@@ -117,7 +134,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    print(generate_index(8, 4))
     # fake_y = np.zeros(1925)
     # save_npy_file('fake_faces_y.npy', fake_y)
     # print(read_npy_file('fake_faces_y.npy').shape)

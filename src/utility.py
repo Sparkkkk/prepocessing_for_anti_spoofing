@@ -3,7 +3,6 @@ import tensorlayer as tl
 from tensorflow.python.tools.freeze_graph import freeze_graph
 from core import Detector
 from core import Alignment
-import tfcoreml
 import numpy as np
 import sys
 import os
@@ -41,15 +40,15 @@ def create_pb_from_ckpt(model_name, output_node):
                  initializer_nodes="")
 
 
-def convert_pb_to_coreml(path_pb, path_coreml, input_shape, tensor_name):
-    coreml_model = tfcoreml.convert (
-        tf_model_path=path_pb,
-        mlmodel_path=path_coreml,
-        image_input_names='data',
-        input_name_shape_dict=input_shape,
-        output_feature_names=tensor_name
-    )
-    return coreml_model
+# def convert_pb_to_coreml(path_pb, path_coreml, input_shape, tensor_name):
+#     coreml_model = tfcoreml.convert (
+#         tf_model_path=path_pb,
+#         mlmodel_path=path_coreml,
+#         image_input_names='data',
+#         input_name_shape_dict=input_shape,
+#         output_feature_names=tensor_name
+#     )
+#     return coreml_model
 
 
 def evaluate_coreml(coreml_model):
